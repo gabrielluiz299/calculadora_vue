@@ -2,42 +2,26 @@
 import { reactive } from 'vue';
 import Cabecalho from './components/Cabecalho.vue';
 import Seletor from './components/Seletor.vue'
-import Formulario from './components/Formulario.vue'
+import Resultado from './components/Resultado.vue'
 
   const numerosParaCalcular = reactive({
-    operation: 'somar',
-    num1: '0',
-    num2: '0'
+    operacoes: 'somar',
+    num1: '',
+    num2: ''
   })
 
-  const getOperacoesSomar = (a, b) => {
-    return a + b;
-  }
-
-  const getOperacoesSubtrair = (a, b) => {
-    return a - b;
-  }
-
-  const getOperacoesDividir = (a, b) => {
-    return a / b;
-  }
-
-  const getOperacoesMultiplicar = (a, b) => {
-    return a * b;
-  }
-
   const getOperacoes = () => {
-    const { operacoes, num1, num2 } = numerosParaCalcular;
+    const {operacoes} = numerosParaCalcular;
 
     switch (operacoes) {
       case 'somar':
-        return getOperacoesSomar();
+        return parseFloat(numerosParaCalcular.num1) + parseFloat(numerosParaCalcular.num2);
       case 'subtrair':
-        return getOperacoesSubtrair();
+        return parseFloat(numerosParaCalcular.num1) - parseFloat(numerosParaCalcular.num2);
       case 'dividir':
-        return getOperacoesDividir();
+        return parseFloat(numerosParaCalcular.num1) / parseFloat(numerosParaCalcular.num2);
       case 'multiplicar':
-        return getOperacoesMultiplicar();
+        return parseFloat(numerosParaCalcular.num1) * parseFloat(numerosParaCalcular.num2);
       default:
         return "erro";
     }
@@ -47,8 +31,12 @@ import Formulario from './components/Formulario.vue'
 <template>
   <div class="container">
     <Cabecalho />
-    <Seletor :operation="operation"/>
-    <Formulario />
+    <Seletor 
+      :operacoes="evento=> numerosParaCalcular.operacoes = evento.target.value" 
+      :num1="evento => numerosParaCalcular.num1 = evento.target.value" 
+      :num2="evento => numerosParaCalcular.num2 = evento.target.value">
+    </Seletor>
+    <Resultado :num1="numerosParaCalcular.num1" :num2="numerosParaCalcular.num2" :result="getOperacoes()"/>
   </div>
 </template>
 
